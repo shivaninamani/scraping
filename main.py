@@ -2,7 +2,7 @@ import csv
 import requests
 from bs4 import BeautifulSoup
 
-# Prepare CSV file
+
 csv_file = open("data1.csv", "w", newline="", encoding="utf-8")
 fieldnames = ["Product URL", "Product Name", "Product Price", "Rating", "Number of Reviews"]
 csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -14,10 +14,10 @@ for page in range(1, 21):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
 
-    # Find all product listings on the page
+    
     products = soup.find_all("div", {"data-component-type": "s-search-result"})
 
-    # Extract information from each product listing
+    
     for product in products:
         product_url = "https://www.amazon.in" + product.find("a", class_="a-link-normal s-no-outline")["href"]
         product_name_element = product.find("span", class_="a-size-medium a-color-base a-text-normal")
@@ -26,8 +26,6 @@ for page in range(1, 21):
         product_price = product_price_element.text.strip() if product_price_element else ""
         rating_element = product.find("span", class_="a-icon-alt")
         rating = rating_element.text.strip() if rating_element else ""
-        #num_reviews_element = product.find("span", {"class": "a-size-base", "dir": "auto"})
-        #num_reviews = num_reviews_element.text.strip() if num_reviews_element else ""
         num_reviews_element = product.find("span", class_="a-size-base")
         num_reviews = num_reviews_element.text.strip() if num_reviews_element else ""
 
